@@ -1,4 +1,5 @@
 import { useState } from "react";
+import NavBar from "./components/NavBar";
 
 const tempMovieData = [
   {
@@ -62,6 +63,7 @@ export default function App() {
 
   return (
     <>
+      <NavBar />
       <main className="main">
         <div className="box">
           <button

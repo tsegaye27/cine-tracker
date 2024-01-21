@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function NavBar() {
   const [query, setQuery] = useState("");
   return (
