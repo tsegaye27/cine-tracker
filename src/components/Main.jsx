@@ -51,9 +51,6 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 function Main() {
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime));
   return (
     <main className="main">
       <SearchResultBox />
@@ -105,6 +102,9 @@ function Movie({ movie }) {
 
 function WatchedBox() {
   const [watched, setWatched] = useState(tempWatchedData);
+  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie.userRating));
+  const avgRuntime = average(watched.map((movie) => movie.runtime));
   const [isOpen2, setIsOpen2] = useState(true);
   return (
     <div className="box">
