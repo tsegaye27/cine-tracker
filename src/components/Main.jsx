@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Box from "./Box";
 
 const tempWatchedData = [
   {
@@ -27,32 +28,15 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 function Main({ children }) {
+  const [watched, setWatched] = useState(tempWatchedData);
   return (
     <main className="main">
       {children}
-      <WatchedList />
+      <Box>
+        <WatchedSummary watched={watched} />
+        <WatchedMovieList watched={watched} />
+      </Box>
     </main>
-  );
-}
-
-function WatchedList() {
-  const [watched, setWatched] = useState(tempWatchedData);
-  const [isOpen2, setIsOpen2] = useState(true);
-  return (
-    <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
-      </button>
-      {isOpen2 && (
-        <>
-          <WatchedSummary watched={watched} />
-          <WatchedMovieList watched={watched} />
-        </>
-      )}
-    </div>
   );
 }
 
