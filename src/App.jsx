@@ -1,6 +1,7 @@
 import NavBar from "./components/NavBar";
 import Main from "./components/Main";
 import { useState } from "react";
+import Box from "./components/Box";
 
 const tempMovieData = [
   {
@@ -87,17 +88,5 @@ function Movie({ movie }) {
         </p>
       </div>
     </li>
-  );
-}
-
-function Box({ children }) {
-  const [isOpen, setIsOpen] = useState(true);
-  return (
-    <div className="box">
-      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
-        {isOpen ? "–" : "+"}
-      </button>
-      {isOpen && children}
-    </div>
   );
 }
