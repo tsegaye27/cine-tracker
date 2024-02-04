@@ -6,7 +6,7 @@ export default function TextExpander({
   expandButtonText = "show more",
   collapseButtonText = "show less",
   expand = false,
-  className = "",buttonColor
+  className = "",
   color = "red",
 }) {
   const [isCollapsed, setIsCollapsed] = useState(expand);
