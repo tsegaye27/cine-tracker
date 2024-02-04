@@ -18,15 +18,13 @@ export default function TextExpander({
     children.split(" ").slice(0, collapsedNumWords).join(" ") + `...`;
   // console.log(words);
   return (
-    <div>
-      <p>
-        {isCollapsed ? children : displayText}
-        <span>
-          <button style={btnStyle} onClick={() => setIsCollapsed((c) => !c)}>
-            {isCollapsed ? collapseButtonText : expandButtonText}
-          </button>
-        </span>
-      </p>
+    <div className={className}>
+      {isCollapsed ? children : displayText}
+      <span>
+        <button style={btnStyle} onClick={() => setIsCollapsed((c) => !c)}>
+          {isCollapsed ? collapseButtonText : expandButtonText}
+        </button>
+      </span>
       {/* <button onClick={() => setIsCollapsed((c) => !c)}>
         {isCollapsed ? collapseButtonText : expandButtonText}
       </button> */}
