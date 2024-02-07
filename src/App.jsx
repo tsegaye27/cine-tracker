@@ -26,7 +26,7 @@ const tempMovieData = [
       "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
   },
 ];
-const query = "interstellar";
+const query = "tsegaye";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
@@ -35,13 +35,27 @@ export default function App() {
 
   useEffect(function () {
     async function fetchMovies() {
-      setIsLoading(true);
-      const res = await fetch(
-        `http://www.omdbapi.com/?i=tt3896198&apikey=4e5b907b&s=${query}`
-      );
-      const data = await res.json();
-      setMovies(data.Search);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?i=tt3896198&apikey=4e5b907b&s=${query}`
+        );
+
+        if (!res.ok) {
+          throw new Error("⛔Something went wrong while fetching");
+        }
+
+        const data = await res.json();
+        if (data.Response === "False") {
+          throw new Error(`${data.Error}`);
+        }
+        setMovies(data.Search);
+      } catch (err) {
+        console.error(err.message);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchMovies();
   }, []);
@@ -53,10 +67,18 @@ export default function App() {
         <NumResults movies={movies} />
       </NavBar>
       <Main>
-        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
+        <Box>
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
+        </Box>
       </Main>
     </>
   );
+}
+
+function ErrorMessage({ message }) {
+  return <p className="error">⛔{message}</p>;
 }
 
 function Loader() {
