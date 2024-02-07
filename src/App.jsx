@@ -28,7 +28,11 @@ const tempMovieData = [
 ];
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
+
+  fetch(` http://www.omdbapi.com/?i=tt3896198&apikey=4e5b907b`)
+    .then((res) => res.json())
+    .then((data) => setMovies(data.Search));
 
   return (
     <>
