@@ -48,7 +48,11 @@ export default function App() {
   );
 
   function handleSelectMovie(id) {
-    setSelectedId(id);
+    setSelectedId(selectedId === id ? null : id);
+  }
+
+  function handleCloseMovie() {
+    setSelectedId(null);
   }
 
   return (
@@ -57,7 +61,11 @@ export default function App() {
         <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
-      <Main selectedId={selectedId} watched={watched}>
+      <Main
+        selectedId={selectedId}
+        watched={watched}
+        onCloseMovie={handleCloseMovie}
+      >
         <Box>
           {isLoading && <Loader />}
           {!isLoading && !error && (
@@ -129,13 +137,13 @@ function Movie({ movie, onSelectMovie }) {
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-function Main({ children, selectedId, watched }) {
+function Main({ children, selectedId, watched, onCloseMovie }) {
   return (
     <main className="main">
       {children}
       <Box>
         {selectedId ? (
-          <MovieDetails selectedId={selectedId} />
+          <MovieDetails onCloseMovie={onCloseMovie} selectedId={selectedId} />
         ) : (
           <>
             <WatchedSummary watched={watched} />
@@ -147,8 +155,23 @@ function Main({ children, selectedId, watched }) {
   );
 }
 
-function MovieDetails({ selectedId }) {
-  return <div className="details">{selectedId}</div>;
+function MovieDetails({ selectedId, onCloseMovie }) {
+  return (
+    <div className="details">
+      <button className="btn-back" onClick={onCloseMovie}>
+        <svg
+          width="22"
+          height="22"
+          xmlns="http://www.w3.org/2000/svg"
+          fillRule="evenodd"
+          clipRule="evenodd"
+        >
+          <path d="M2.117 12l7.527 6.235-.644.765-9-7.521 9-7.479.645.764-7.529 6.236h21.884v1h-21.883z" />
+        </svg>
+      </button>
+      {selectedId}
+    </div>
+  );
 }
 
 function WatchedSummary({ watched }) {
