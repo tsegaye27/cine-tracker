@@ -1,6 +1,7 @@
 import NavBar from "./components/NavBar";
 import { useEffect, useState } from "react";
 import Box from "./components/Box";
+import StarRating from "./components/StarRating";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
@@ -223,6 +224,10 @@ function MovieDetails({ selectedId, onCloseMovie }) {
         </div>
       </header>
       <section>
+        <div className="rating">
+          <StarRating maxRating={10} size={22} />
+          
+        </div>
         <p>
           <em>{plot}</em>
         </p>
