@@ -65,6 +65,7 @@ export default function App() {
         selectedId={selectedId}
         watched={watched}
         onCloseMovie={handleCloseMovie}
+        x
       >
         <Box>
           {isLoading && <Loader />}
@@ -137,7 +138,14 @@ function Movie({ movie, onSelectMovie }) {
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-function Main({ children, selectedId, watched, onCloseMovie }) {
+function Main({
+  children,
+  selectedId,
+  watched,
+  onCloseMovie,
+  setIsLoading,
+  setError,
+}) {
   return (
     <main className="main">
       {children}
@@ -156,6 +164,37 @@ function Main({ children, selectedId, watched, onCloseMovie }) {
 }
 
 function MovieDetails({ selectedId, onCloseMovie }) {
+  const [movie, setMovie] = useState({});
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = movie;
+  useEffect(
+    function () {
+      async function movieDetails(id) {
+        try {
+          const res = await fetch(
+            `http://www.omdbapi.com/?i=${id}&apikey=4e5b907b`
+          );
+          const data = await res.json();
+          setMovie(data);
+        } catch (err) {
+          console.error(err.message);
+        }
+      }
+      movieDetails(selectedId);
+    },
+    [selectedId]
+  );
+
   return (
     <div className="details">
       <button className="btn-back" onClick={onCloseMovie}>
