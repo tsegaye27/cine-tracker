@@ -11,12 +11,6 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(function () {
-    document.addEventListener("keydown", (e) => {
-      if (e.code === "Escape") handleCloseMovie();
-    });
-  }, []);
-
   useEffect(
     function () {
       const controller = new AbortController();
@@ -210,6 +204,15 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Director: director,
     Genre: genre,
   } = movie;
+
+  useEffect(
+    function () {
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Escape") onCloseMovie();
+      });
+    },
+    [onCloseMovie]
+  );
 
   useEffect(
     function () {
