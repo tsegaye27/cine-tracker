@@ -54,8 +54,11 @@ body {
   max-width: 42rem;
   background-color: var(--color-background-500);
   border-radius: 0.9rem;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
+
+  scrollbar-width: thin;
+  scrollbar-color: #8888 #dddd;
 }
 
 .loader {
