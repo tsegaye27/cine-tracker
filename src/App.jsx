@@ -13,12 +13,14 @@ export default function App() {
 
   useEffect(
     function () {
+      const controller = new AbortController();
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError("");
           const res = await fetch(
-            `http://www.omdbapi.com/?i=tt3896198&apikey=4e5b907b&s=${query}`
+            `http://www.omdbapi.com/?i=tt3896198&apikey=4e5b907b&s=${query}`,
+            { signal: controller.signal }
           );
 
           if (!res.ok) {
@@ -30,8 +32,9 @@ export default function App() {
             throw new Error("Movie Not Found");
           }
           setMovies(data.Search);
+          setError("");
         } catch (err) {
-          setError(err.message);
+          setError(err.name === "AbortError" ? "" : err.message);
         } finally {
           setIsLoading(false);
         }
@@ -44,6 +47,9 @@ export default function App() {
       }
 
       fetchMovies();
+      return function () {
+        controller.abort();
+      };
     },
     [query]
   );
@@ -57,9 +63,11 @@ export default function App() {
   }
 
   function handleAddWatched(movie) {
-    setWatched((watched) =>
-      watched.includes(movie) ? watched : [...watched, movie]
-    );
+    setWatched((watched) => [...watched, movie]);
+  }
+
+  function handleRemoveMovie(movie) {
+    setWatched((watched) => watched.filter((item) => item !== movie));
   }
 
   return (
@@ -73,6 +81,7 @@ export default function App() {
         watched={watched}
         onCloseMovie={handleCloseMovie}
         onAddWatched={handleAddWatched}
+        onRemoveMovie={handleRemoveMovie}
       >
         <Box>
           {isLoading && <Loader />}
@@ -145,7 +154,14 @@ function Movie({ movie, onSelectMovie }) {
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-function Main({ children, selectedId, watched, onCloseMovie, onAddWatched }) {
+function Main({
+  children,
+  selectedId,
+  watched,
+  onCloseMovie,
+  onAddWatched,
+  onRemoveMovie,
+}) {
   return (
     <main className="main">
       {children}
@@ -160,7 +176,7 @@ function Main({ children, selectedId, watched, onCloseMovie, onAddWatched }) {
         ) : (
           <>
             <WatchedSummary watched={watched} />
-            <WatchedMovieList watched={watched} />
+            <WatchedMovieList watched={watched} onRemoveMovie={onRemoveMovie} />
           </>
         )}
       </Box>
@@ -188,6 +204,18 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Director: director,
     Genre: genre,
   } = movie;
+
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie | ${title}`;
+      return function () {
+        document.title = "usePopcorn";
+      };
+    },
+    [title]
+  );
+
   useEffect(
     function () {
       async function movieDetails(id) {
@@ -318,17 +346,21 @@ function WatchedSummary({ watched }) {
   );
 }
 
-function WatchedMovieList({ watched }) {
+function WatchedMovieList({ watched, onRemoveMovie }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatchedMovie movie={movie} key={movie.imdbID} />
+        <WatchedMovie
+          movie={movie}
+          key={movie.imdbID}
+          onRemoveMovie={onRemoveMovie}
+        />
       ))}
     </ul>
   );
 }
 
-function WatchedMovie({ movie }) {
+function WatchedMovie({ movie, onRemoveMovie }) {
   return (
     <li>
       <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -347,6 +379,9 @@ function WatchedMovie({ movie }) {
           <span>{movie.runtime} min</span>
         </p>
       </div>
+      <button className="btn-delete" onClick={() => onRemoveMovie(movie)}>
+        X
+      </button>
     </li>
   );
 }
