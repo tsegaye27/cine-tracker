@@ -1,17 +1,12 @@
 import { useState } from "react";
 
-function useGeolocation() {}
-
-export default function App() {
+function useGeolocation(callback) {
   const [isLoading, setIsLoading] = useState(false);
-  const [countClicks, setCountClicks] = useState(0);
   const [position, setPosition] = useState({});
   const [error, setError] = useState(null);
 
-  const { lat, lng } = position;
-
   function getPosition() {
-    setCountClicks((count) => count + 1);
+    callback();
 
     if (!navigator.geolocation)
       return setError("Your browser does not support geolocation");
@@ -31,6 +26,24 @@ export default function App() {
       }
     );
   }
+  return { isLoading, position, error, getPosition };
+}
+
+export default function App() {
+  const [countClicks, setCountClicks] = useState(0);
+  const { isLoading, position, error, getPosition } =
+    useGeolocation(handleCountClicks);
+
+  const { lat, lng } = position;
+
+  function handleCountClicks() {
+    setCountClicks((count) => count + 1);
+  }
+
+  const linkStyle = {
+    color: "#292929",
+    textDecoration: "none",
+  };
 
   return (
     <div>
@@ -47,6 +60,7 @@ export default function App() {
             target="_blank"
             rel="noreferrer"
             href={`https://www.openstreetmap.org/#map=16/${lat}/${lng}`}
+            style={linkStyle}
           >
             {lat}, {lng}
           </a>
