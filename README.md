@@ -1,8 +1,27 @@
-# React + Vite
+### **CineTracker - Your Movie Companion** 🎬  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![CineTracker Screenshot](./cineTracker.png)
 
-Currently, two official plugins are available:
+**Description**  
+CineTracker helps you search, rate, and track your watched movies effortlessly. Built with React, it provides an intuitive interface for movie enthusiasts to discover and manage their film lists.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Features**  
+✅ Search for movies by title  
+✅ Add movies to a watchlist  
+✅ Rate and track watched movies  
+✅ Responsive UI for all devices  
+
+**Tech Stack**  
+- React.js  
+- API for movie data OMDb  
+- Local Storage for state persistence  
+
+**Installation**  
+```sh
+git clone https://github.com/your-username/cinetracker.git
+cd cinetracker
+npm install
+npm run dev
+```
+
+---
