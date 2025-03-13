@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function NavBar({ children }) {
   return (
     <nav className="nav-bar">
@@ -13,7 +11,7 @@ function Logo() {
   return (
     <div className="logo">
       <span role="img">🍿</span>
-      <h1>usePopcorn</h1>
+      <h1>cineTracker</h1>
     </div>
   );
 }

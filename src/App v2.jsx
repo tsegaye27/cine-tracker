@@ -20,7 +20,7 @@ export default function App() {
           setError("");
           const res = await fetch(
             `http://www.omdbapi.com/?i=tt3896198&apikey=4e5b907b&s=${query}`,
-            { signal: controller.signal }
+            { signal: controller.signal },
           );
 
           if (!res.ok) {
@@ -52,7 +52,7 @@ export default function App() {
         controller.abort();
       };
     },
-    [query]
+    [query],
   );
 
   function handleSelectMovie(id) {
@@ -191,7 +191,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   const [userRating, setUserRating] = useState("");
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
   const watchedMovieRating = watched.find(
-    (movie) => movie.imdbID === selectedId
+    (movie) => movie.imdbID === selectedId,
   )?.userRating;
   const {
     Title: title,
@@ -217,7 +217,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
         document.removeEventListener("keydown", callback);
       };
     },
-    [onCloseMovie]
+    [onCloseMovie],
   );
 
   useEffect(
@@ -225,10 +225,10 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       if (!title) return;
       document.title = `Movie | ${title}`;
       return function () {
-        document.title = "usePopcorn";
+        document.title = "cineTracker";
       };
     },
-    [title]
+    [title],
   );
 
   useEffect(
@@ -237,7 +237,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
         try {
           setIsLoading(true);
           const res = await fetch(
-            `http://www.omdbapi.com/?i=${id}&apikey=4e5b907b`
+            `http://www.omdbapi.com/?i=${id}&apikey=4e5b907b`,
           );
           const data = await res.json();
           setMovie(data);
@@ -249,7 +249,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       }
       movieDetails(selectedId);
     },
-    [selectedId]
+    [selectedId],
   );
 
   function handleAdd() {
@@ -330,10 +330,10 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(
-    watched.map((movie) => movie.imdbRating)
+    watched.map((movie) => movie.imdbRating),
   ).toFixed(1);
   const avgUserRating = average(
-    watched.map((movie) => movie.userRating)
+    watched.map((movie) => movie.userRating),
   ).toFixed(1);
   const avgRuntime = average(watched.map((movie) => movie.runtime)).toFixed(1);
   return (
